@@ -37,11 +37,10 @@ class GUI(tk.Frame):
     def draw_board(self):
         for x in range(COLS):
             for y in range(ROWS):
-                x1 = x * SQUARE_SIZE
-                x2 = x1 + SQUARE_SIZE
-                y1 = y * SQUARE_SIZE
-                y2 = y1 + SQUARE_SIZE
-                self.canvas.create_rectangle(x1, y1, x2, y2, fill='navajo white' if (x+y)%2==0 else 'burlywood3', outline='black')
+                x_pix = [0, 0]
+                y_pix = [0, 0]
+                pos_to_pixel((x, y), x_pix, y_pix)
+                self.canvas.create_rectangle(x_pix[0], y_pix[0], x_pix[1], y_pix[1], fill='navajo white' if (x+y)%2==0 else 'burlywood3', outline='black')
 
     def draw_pieces(self):
         all_pieces = []
