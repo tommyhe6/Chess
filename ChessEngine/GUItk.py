@@ -47,7 +47,7 @@ class GUI(tk.Frame):
         for color in self.board.pos_pieces:
             i = 0
             for pos, piece in self.board.pos_pieces[color].items():
-                p = tk.PhotoImage(file='Imgs/{}.png'.format(repr(piece)))
+                p = tk.PhotoImage(file='../Imgs/{}.png'.format(repr(piece)))
                 self.canvas.create_image(SQUARE_SIZE * (pos[0]+1/2), SQUARE_SIZE * (pos[1]+1/2), image=p)
                 all_pieces.append(p)
         self.canvas.images = all_pieces
