@@ -4,7 +4,7 @@ import tkinter as tk
 
 def main():
     root = tk.Tk()
-    root.tk.call('wm', 'iconphoto', root._w, tk.PhotoImage(file='Imgs/icon.png'))
+    root.tk.call('wm', 'iconphoto', root._w, tk.PhotoImage(file='../Imgs/icon.png'))
     b = Board()
     g = GUI(root, b)
     g.draw_board()
