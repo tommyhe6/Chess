@@ -59,12 +59,12 @@ class Board:
             return True
         return False
 
-    def move(self, pos1, pos2, new_piece=None):
+    def move(self, pos1, pos2, new_piece=pc.Queen):
         piece = self.get_piece(pos1)
         if pos2 in piece.show_moves(pos1):
             del self.pos_pieces[piece.color][pos1]
             if isinstance(piece, pc.Pawn) and pos2[1] == 7:
-                self.pos_pieces[piece.color][pos2] = new_piece
+                self.pos_pieces[piece.color][pos2] = new_piece(piece.color, self)
             else:
                 if isinstance(piece, pc.Pawn):
                     piece.has_moved = True
