@@ -4,6 +4,7 @@ import os
 from board import Board
 import copy
 from PIL import ImageTk, Image
+import time
 
 ROWS = 8
 COLS = 8
@@ -11,7 +12,7 @@ SQUARE_SIZE = 64
 WIDTH = ROWS * SQUARE_SIZE
 HEIGHT = COLS * SQUARE_SIZE
 
-#TODO switching pawn piece
+#TODO choosing pawn piece at end
 
 def other(color):
     return 'w' if color == 'b' else 'b'
@@ -25,7 +26,7 @@ def pos_to_pixel(pos, x, y):
 class GUI(tk.Frame):
     def __init__(self, root, board):
         tk.Frame.__init__(self, root)
-        self.root = root;
+        self.root = root
         self.canvas = tk.Canvas(self, width=WIDTH, height=HEIGHT)
         self.canvas.pack(side='top', fill='both', expand='true')
         self.canvas.bind('<Button-1>', self.click)
@@ -71,9 +72,15 @@ class GUI(tk.Frame):
         for x, y in moves:
             self.moves_drawn.append(self.canvas.create_oval(x-R, y-R, x+R, y+R, fill='Azure', width=0))
 
-    def move_piece(self, pos1, pos2):
-        piece1 = self.get_piece(pos1)
-        self.board.move(pos1, pos2)
+    def win(self, color):
+        win_root = tk.Tk()
+        win_root.geometry('500x500')
+        win_root.resizable(0, 0)
+        text = tk.Text(win_root)
+        text.insert(tk.INSERT, '{} won!'.format(color))
+        text.configure(font=Font(size=30))
+        text.pack()
+        win_root.mainloop()
 
     def click(self, event):
         pos = self.get_coords(event)
@@ -106,8 +113,8 @@ class GUI(tk.Frame):
                         self.prev_moves.append(self.canvas.create_rectangle(x[i][0], y[i][0], x[i][1], y[i][1], outline='light sky blue', width=3))
             [self.canvas.delete(i) for i in self.moves_drawn]
             self.draw_pieces()
-            if self.board.mated(self.turn):
-                self.canvas.create_text(200, 200, font=Font(size=36), text='{} won!'.format('white' if self.turn == 'w' else 'black'))
             self.moves_shown = False
             self.curr_piece = None
+            if self.board.mated(self.turn):
+                self.after(2000, lambda: self.win('white' if self.turn == 'b' else 'black'))
 

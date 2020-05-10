@@ -45,13 +45,14 @@ class Pawn(Piece):
     def __init__(self, color, board):
         super().__init__(color, board)
         self.has_moved = False
+        self.jump = -1
 
     def show_moves(self, pos):
+        moves = []
         if self.color == 'w':
             dy = 1
         else:
             dy = -1
-        moves = []
         diag = [(pos[0] + 1, pos[1] + dy), (pos[0] - 1, pos[1] + dy)]
         forward = [(pos[0], pos[1] + dy)]
         if not self.has_moved:
@@ -63,8 +64,8 @@ class Pawn(Piece):
         for i in forward:
             if i not in self.pos_pieces[self.color] and i not in self.pos_pieces[other(self.color)]:
                 moves.append(i)
+        moves += self.board.en_passant(pos)
         return moves
-        #TODO en passant
 
     def __repr__(self):
         return '{}p'.format(self.color)
@@ -86,6 +87,10 @@ class Knight(Piece):
 
 
 class Rook(Piece):
+    def __init__(self, color, board):
+        super().__init__(color, board)
+        self.has_moved = False
+
     def show_moves(self, pos):
         return super().show_moves(True, False, 8, pos)
 
@@ -110,9 +115,14 @@ class Queen(Piece):
 
 
 class King(Piece):
+    def __init__(self, color, board):
+        super().__init__(color, board)
+        self.has_moved = False
+
     def show_moves(self, pos):
-        return super().show_moves(True, True, 1, pos)
-        #TODO castle
+        moves = super().show_moves(True, True, 1, pos)
+        moves += self.board.castle(self.color)
+        return moves
 
     def __repr__(self):
         return '{}k'.format(self.color)
