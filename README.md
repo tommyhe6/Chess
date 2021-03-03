@@ -5,3 +5,5 @@ To play against the bot, simply run
 ```
 python main.py
 ```
+
+To play on LAN,
