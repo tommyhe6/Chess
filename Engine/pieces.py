@@ -7,6 +7,7 @@ def in_range(pos):
 def other(color):
     return 'w' if color == 'b' else 'b'
 
+
 class Piece:
     def __init__(self, color, board):
         self.color = color
@@ -50,9 +51,9 @@ class Pawn(Piece):
     def show_moves(self, pos):
         moves = []
         if self.color == 'w':
-            dy = 1
-        else:
             dy = -1
+        else:
+            dy = 1
         diag = [(pos[0] + 1, pos[1] + dy), (pos[0] - 1, pos[1] + dy)]
         forward = [(pos[0], pos[1] + dy)]
         if not self.has_moved:

@@ -1,7 +1,8 @@
+from Engine.board import Board
+import Engine.info
 import tkinter as tk
 from tkinter.font import Font
 import os
-from board import Board
 import copy
 from PIL import ImageTk, Image
 import time
@@ -12,7 +13,7 @@ SQUARE_SIZE = 64
 WIDTH = ROWS * SQUARE_SIZE
 HEIGHT = COLS * SQUARE_SIZE
 
-#TODO choosing pawn piece at end
+#TODO non-queen pawn promotion
 
 def other(color):
     return 'w' if color == 'b' else 'b'
@@ -22,6 +23,7 @@ def pos_to_pixel(pos, x, y):
     x[1] = x[0] + SQUARE_SIZE
     y[0] = pos[1] * SQUARE_SIZE
     y[1] = y[0] + SQUARE_SIZE
+
 
 class GUI(tk.Frame):
     def __init__(self, root, board):
@@ -35,6 +37,7 @@ class GUI(tk.Frame):
         self.last = {}
         self.turn = 'w'
         self.prev_moves = []
+        self.res = (False, None, None)
 
     def draw_board(self):
         for x in range(COLS):
@@ -49,7 +52,7 @@ class GUI(tk.Frame):
         for color in self.board.pos_pieces:
             i = 0
             for pos, piece in self.board.pos_pieces[color].items():
-                p = ImageTk.PhotoImage(Image.open('../Imgs/{}.png'.format(repr(piece))).convert('RGBA'))
+                p = ImageTk.PhotoImage(Image.open('Imgs/{}.png'.format(repr(piece))).convert('RGBA'))
                 self.canvas.create_image(SQUARE_SIZE * (pos[0]+1/2), SQUARE_SIZE * (pos[1]+1/2), image=p)
                 all_pieces.append(p)
         self.canvas.images = all_pieces
@@ -85,8 +88,9 @@ class GUI(tk.Frame):
     def click(self, event):
         pos = self.get_coords(event)
         piece = self.get_piece(pos)
+        self.res = (False, None, None)
         if not self.moves_shown:
-            if piece is not None and piece.color == self.turn:
+            if piece is not None and piece.color == self.turn and Engine.info.COLOR == self.turn:
                 self.draw_moves(piece.show_moves(pos))
                 x = [0, 0]
                 y = [0, 0]
@@ -102,6 +106,7 @@ class GUI(tk.Frame):
                 if not board_temp.in_check(self.turn):
                     self.board = board_temp
                     self.turn = other(self.turn)
+                    self.res = (True, self.last['pos'], pos)
                 if self.last['pos'] != None:
                     [self.canvas.delete(i) for i in self.prev_moves]
                     self.prev_moves = []

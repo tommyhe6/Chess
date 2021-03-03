@@ -1,4 +1,4 @@
-import pieces as pc
+import Engine.pieces as pc
 import copy
 
 ROWS = 8
@@ -13,27 +13,27 @@ def in_range(pos):
 def other(color):
     return 'w' if color=='b' else 'b'
 
-#TODO actually determine draws properly rather than be lazy
+#TODO actually properly determine draws rather than be lazy
 
 class Board:
     def __init__(self):
         self.pos_pieces = {}
-        self.pos_pieces['w'] = {
-            (0, 0): pc.Rook('w', self),
-            (1, 0): pc.Knight('w', self),
-            (2, 0): pc.Bishop('w', self),
-            (3, 0): pc.King('w', self),
-            (4, 0): pc.Queen('w', self),
-            (5, 0): pc.Bishop('w', self),
-            (6, 0): pc.Knight('w', self),
-            (7, 0): pc.Rook('w', self)
+        self.pos_pieces['b'] = {
+            (0, 0): pc.Rook('b', self),
+            (1, 0): pc.Knight('b', self),
+            (2, 0): pc.Bishop('b', self),
+            (3, 0): pc.Queen('b', self),
+            (4, 0): pc.King('b', self),
+            (5, 0): pc.Bishop('b', self),
+            (6, 0): pc.Knight('b', self),
+            (7, 0): pc.Rook('b', self)
         }
-        self.pos_pieces['b'] = {}
+        self.pos_pieces['w'] = {}
         for i in range(8):
-            self.pos_pieces['w'][i, 1] = pc.Pawn('w', self)
-        for pos, piece in self.pos_pieces['w'].items():
+            self.pos_pieces['b'][i, 1] = pc.Pawn('b', self)
+        for pos, piece in self.pos_pieces['b'].items():
             new_pos = (pos[0], 7 - pos[1])
-            self.pos_pieces['b'][new_pos] = type(piece)('b', self)
+            self.pos_pieces['w'][new_pos] = type(piece)('w', self)
         self.move_number = 0
 
     def get_piece(self, pos):
@@ -66,12 +66,12 @@ class Board:
 
     def move(self, pos1, pos2, new_piece=pc.Queen):
         piece = self.get_piece(pos1)
-        if pos2 in piece.show_moves(pos1):
+        if piece != None and pos2 in piece.show_moves(pos1):
             self.move_number += 1
             del self.pos_pieces[piece.color][pos1]
-            if piece.color == 'w' and isinstance(piece, pc.Pawn) and pos2[1] == 7:
+            if piece.color == 'b' and isinstance(piece, pc.Pawn) and pos2[1] == 7:
                 self.pos_pieces[piece.color][pos2] = new_piece(piece.color, self)
-            elif piece.color == 'b' and isinstance(piece, pc.Pawn) and pos2[1] == 0:
+            elif piece.color == 'w' and isinstance(piece, pc.Pawn) and pos2[1] == 0:
                 self.pos_pieces[piece.color][pos2] = new_piece(piece.color, self)
             else:
                 self.pos_pieces[piece.color][pos2] = piece
@@ -89,23 +89,23 @@ class Board:
                 del self.pos_pieces[other(piece.color)][pos2]
             if isinstance(piece, pc.King):
                 if pos2[0] - pos1[0] == 2:
-                    self.pos_pieces[piece.color][(4, pos1[1])] = self.pos_pieces[piece.color][(7, pos1[1])]
+                    self.pos_pieces[piece.color][(5, pos1[1])] = self.pos_pieces[piece.color][(7, pos1[1])]
                     del self.pos_pieces[piece.color][(7, pos1[1])]
                 elif pos1[0] - pos2[0] == 2:
-                    self.pos_pieces[piece.color][(2, pos1[1])] = self.pos_pieces[piece.color][(0, pos1[1])]
+                    self.pos_pieces[piece.color][(3, pos1[1])] = self.pos_pieces[piece.color][(0, pos1[1])]
                     del self.pos_pieces[piece.color][(0, pos1[1])]
 
 
     def castle(self, color):
         res = []
-        king_pos = [(3, 0)]
+        king_pos = [(4, 0)]
         rook = {}
         pos = {}
         rook['r'] = [(7, 0)]
         rook['l'] = [(0, 0)]
-        pos['r'] = [(3, 0), (4, 0), (5, 0), (6, 0)]
-        pos['l'] = [(3, 0), (2, 0), (1, 0)]
-        if color == 'b':
+        pos['r'] = [(4, 0), (5, 0), (6, 0)]
+        pos['l'] = [(4, 0), (3, 0), (2, 0), (1, 0)]
+        if color == 'w':
             for i in [king_pos, rook['r'], rook['l'], pos['r'], pos['l']]:
                 for j in range(len(i)):
                     i[j] = (i[j][0], 7 - i[j][1])
@@ -113,8 +113,8 @@ class Board:
         for d in ['r', 'l']:
             if king_pos[0] in self.pos_pieces[color] and isinstance(self.pos_pieces[color][king_pos[0]], pc.King) and not self.pos_pieces[color][king_pos[0]].has_moved:
                 if rook[d][0] in self.pos_pieces[color] and isinstance(self.pos_pieces[color][rook[d][0]], pc.Rook) and not self.pos_pieces[color][rook[d][0]].has_moved:
-                    if [i not in self.all_moves(other(color), exclude=pc.King) for i in pos[d]] == [1, 1, 1] if d == 'l' else [1, 1, 1, 1]:
-                        if [(i not in self.pos_pieces[color] and i not in self.pos_pieces[other(color)]) for i in pos[d][1:]] == ([1, 1] if d == 'l' else [1, 1, 1]):
+                    if [i not in self.all_moves(other(color), exclude=pc.King) for i in pos[d]] == [1, 1, 1, 1] if d == 'l' else [1, 1, 1]:
+                        if [(i not in self.pos_pieces[color] and i not in self.pos_pieces[other(color)]) for i in pos[d][1:]] == ([1, 1, 1] if d == 'l' else [1, 1]):
                             res.append((king_pos[0][0] - 2 if d == 'l' else king_pos[0][0] + 2, king_pos[0][1]))
         return res
 
@@ -128,7 +128,7 @@ class Board:
                     side_piece = self.get_piece(s)
                     if isinstance(side_piece, pc.Pawn):
                         if self.move_number == side_piece.jump:
-                            res.append((s[0], s[1] + (1 if curr_piece.color == 'w' else -1)))
+                            res.append((s[0], s[1] + (1 if curr_piece.color == 'b' else -1)))
         return res
 
     def mated(self, color):
