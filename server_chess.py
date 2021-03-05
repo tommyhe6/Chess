@@ -11,6 +11,7 @@ def accept_connection():
         clients.add(client)
         threading.Thread(target=handle_client, args=(client,)).start()
 
+
 def handle_client(client):
     global TURN
     while True:
@@ -19,20 +20,17 @@ def handle_client(client):
         for sock in clients:
             sock.send(bytes('{}{}'.format(move, TURN), 'utf8'))
 
-clients = set()
-addresses = {}
-
-HOST = ''
-PORT = 33001
-#     HOST = socket.gethostname() #local
-#      PORT = 5000 #temporary port
-#      HOST = '192.168.3.108'
-#      PORT = 1233
-BUFSIZ = 1024
-ADDR = (HOST, PORT)
 
 if __name__ == '__main__':
+    clients = set()
+    addresses = {}
+    BUFSIZ = 1024
     SERVER = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    HOST = input('Enter host: ')
+    PORT = int(input('Enter port: '))
+    # HOST = '' # local, same machine
+    # PORT = 33000 # local, same machine
+    ADDR = (HOST, PORT)
     SERVER.bind(ADDR)
     SERVER.listen(3)
     print('Waiting for connection...')

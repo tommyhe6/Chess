@@ -19,6 +19,7 @@ def receive():
         except OSError:
             break
 
+
 def send(event=None):
     if g.res[0]:
         pos1 = g.res[1]
@@ -31,14 +32,8 @@ def send(event=None):
 if __name__ == "__main__":
     BUFSIZ = 1024
     HOST = input('Enter host: ')
-    PORT = input('Enter port: ')
+    PORT = int(input('Enter port: '))
     Engine.info.COLOR = input('Enter color (w or b): ')
-    if not PORT:
-        PORT = 33000
-    else:
-        PORT = int(PORT)
-    # HOST = socket.gethostname()
-    # PORT = 5000
     ADDR = (HOST, PORT)
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect(ADDR)
