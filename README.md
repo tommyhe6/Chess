@@ -7,7 +7,7 @@ python main.py
 ```
 
 To play on LAN,
-first started a server with
+first start a server with
 ```
 python server_chess.py
 ```
@@ -16,4 +16,4 @@ Then start your clients on any other devices in your LAN with
 ```
 python client_chess.py
 ```
-and input the IP address where the server is hosted, the port used, as well as the color of pieces ('w' or 'b').
+and input the IP address where the server is hosted, the assigned port, as well as the color of pieces ('w' for one 'b' for the other).
