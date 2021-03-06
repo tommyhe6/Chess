@@ -52,4 +52,5 @@ if __name__ == "__main__":
 
     receive_thread = threading.Thread(target=receive)
     receive_thread.start()
+    root.protocol("WM_DELETE_WINDOW", root.destroy)
     root.mainloop()

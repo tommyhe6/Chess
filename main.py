@@ -21,5 +21,6 @@ if __name__ == "__main__":
     d = Draw(root)
     g.pack(expand='true')
     d.pack()
+    root.protocol("WM_DELETE_WINDOW", root.destroy)
     root.mainloop()
 
