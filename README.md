@@ -1,6 +1,11 @@
 # Chess
 Chess UI created with tkinter and ChessBot trained with minimax with a depth of 4, supplemented with alpha-beta pruning.
 
+First install the requirements with
+```
+pip install -r requirements.txt
+```
+
 To play against the bot, simply run
 ```
 python main.py
