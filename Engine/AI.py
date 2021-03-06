@@ -38,10 +38,6 @@ def minimax_AB(depth, board, maxi, color, alpha=-math.inf, beta=math.inf):
             break
     return (best_val, best_move)
 
-def convert_board(board):
-    pass
-# return pos_pieces
-
 def uci_to_mv(move):
     mv = move.uci()
     return ((ord(mv[0]) - ord('a'), 7 - ord(mv[1]) + ord('1')), (ord(mv[2]) - ord('a'), 7 - ord(mv[3]) + ord('1')))

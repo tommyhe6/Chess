@@ -1,5 +1,3 @@
-import chess
-
 val_piece = {
     'p' : 100,
     'n' : 320,
@@ -84,5 +82,3 @@ val_pos = {
     # -50,-30,-30,-30,-30,-30,-30,-50
 }
 
-def convert(board):
-    board.pos_pieces
