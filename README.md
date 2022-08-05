@@ -1,5 +1,5 @@
 # Chess
-Chess UI created with tkinter and ChessBot trained with minimax with a depth of 4, supplemented with alpha-beta pruning.
+Chess UI created with tkinter and ChessBot trained with minimax with a depth of 4, supplemented with alpha-beta pruning. AI ~ 900 elo (if I were to guess).
 
 ## Installation
 To install the game, make sure you have tkinter installed, which you can do on MacOS with
