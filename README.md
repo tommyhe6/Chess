@@ -10,7 +10,7 @@ or on Linux with
 ```
 sudo apt-get install python3-tk
 ```
-Install the required pyhton packaged with
+Install the required python packaged with
 ```
 pip install -r requirements.txt
 ```
